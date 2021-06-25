@@ -23,7 +23,7 @@ const insertVehicle = async (vehicle: Vehicle) => {
     vehicle.ano
   ])
 
-  let retorno = await dbQuery(`SELECT seq AS Id FROM sqlite_sequence WHERE name = 'vehicle'`);
+  const retorno = await dbQuery(`SELECT seq AS Id FROM sqlite_sequence WHERE name = 'vehicle'`);
   return getVehicle(retorno[0].Id);
 }
 
