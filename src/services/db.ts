@@ -1,0 +1,34 @@
+import sqlite3 from "sqlite3";
+import AppError from '../errors/AppError';
+
+const DATABASE_FILE = process.env.APP_DATABASE_FILE;
+
+if (!DATABASE_FILE) {
+  throw new AppError('DATABASE_FILE not found', 400);
+}
+
+export const openConnection = () => {
+  let db = new sqlite3.Database(DATABASE_FILE);
+  return db;
+}
+
+export const dbQueryFirst = async (query: string, params?: any[]) => {
+  const retorno = await dbQuery(query, params);
+  return retorno[0];
+}
+
+export const dbQuery = (query: string, params?: any[]) => {
+  let db = openConnection();
+  return new Promise<any[]>((resolve, reject) => {
+    db.all(query, params, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    })
+  })
+  .finally(() => {
+    db.close();
+  })
+}
