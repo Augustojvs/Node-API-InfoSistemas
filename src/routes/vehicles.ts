@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { vehicleController } from '../controllers/vehicles';
-import AppError from '../errors/AppError';
 
 const vehicleRouter = Router();
 
