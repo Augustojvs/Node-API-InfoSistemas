@@ -1,14 +1,8 @@
 import sqlite3 from "sqlite3";
-import AppError from '../errors/AppError';
-
-const DATABASE_FILE = process.env.APP_DATABASE_FILE;
-
-if (!DATABASE_FILE) {
-  throw new AppError('DATABASE_FILE not found', 400);
-}
+import { resolve } from 'path'
 
 export const openConnection = () => {
-  let db = new sqlite3.Database(DATABASE_FILE);
+  let db = new sqlite3.Database(resolve(__dirname, '..', '..', 'vehicles.db'));
   return db;
 }
 

@@ -1,3 +1,4 @@
+import AppError from "../errors/AppError";
 import { dbQuery, dbQueryFirst } from "../services/db"
 
 export type Vehicle = {
@@ -42,15 +43,16 @@ const deleteVehicle = async (id: number) => {
 }
 
 const updateVehicle = async (vehicle: Vehicle) => {
-  await dbQuery(`UPDATE vehicle SET 
-  placa = ?, chassi = ?, renavam = ?, modelo = ?, marca = ?, ano = ?`, 
+  await dbQuery(`UPDATE vehicle 
+  SET placa = ?, chassi = ?, renavam = ?, modelo = ?, marca = ?, ano = ? WHERE id = ?`, 
   [
     vehicle.placa, 
     vehicle.chassi, 
     vehicle.renavam, 
     vehicle.modelo, 
     vehicle.marca, 
-    vehicle.ano
+    vehicle.ano,
+    vehicle.id
   ])
 
   return getVehicle(vehicle.id);

@@ -4,28 +4,6 @@ import { Vehicle, vehicleModel } from '../models/vehicles';
 
 const insertVehicle = async (req: Request, res: Response) => {
   const vehicle = req.body as Vehicle;
-
-  if (!vehicle) {
-    throw new AppError('Veiculo inválido');
-  }
-  if (!vehicle.placa) {
-    throw new AppError('Informe a placa do veículo');
-  }
-  if (!vehicle.chassi) {
-    throw new AppError('Informe o chassi do veículo');
-  }
-  if (!vehicle.renavam) {
-    throw new AppError('Informe o renavam do veículo');
-  }
-  if (!vehicle.modelo) {
-    throw new AppError('Informe o modelo do veículo');
-  }
-  if (!vehicle.marca) {
-    throw new AppError('Informe a marca do veículo');
-  }
-  if (!vehicle.ano) {
-    throw new AppError('Informe o ano do veículo');
-  }
   
   try {
     const newVehicle = await vehicleModel.insertVehicle(vehicle);
@@ -85,9 +63,13 @@ const updateVehicle = async (req: Request, res: Response) => {
   
   const id = parseInt(req.params.id);
   const vehicle = req.body as Vehicle;
-
+  const vehicleToUpdate = await vehicleModel.getVehicle(id);
+  
   if (!id) {
     throw new AppError('Id inválido');
+  }
+  if (!vehicleToUpdate) {
+    throw new AppError('Veículo não encontrado');
   }
   if (!vehicle) {
     throw new AppError('Veiculo inválido');
@@ -111,14 +93,9 @@ const updateVehicle = async (req: Request, res: Response) => {
     throw new AppError('Informe o ano do veículo');
   }
   
-  const vehicleSaved = await vehicleModel.getVehicle(id);
-  if (!vehicleSaved) {
-    throw new AppError('Veículo não encontrado');
-  }
-  
   try {
     const getVehicle = await vehicleModel.updateVehicle(vehicle)
-    return res.json(getVehicle);
+    return res.json(getVehicle).status(200);
   } catch (error) {
     throw new AppError('Falha ao atualizar veiculo');
   }
