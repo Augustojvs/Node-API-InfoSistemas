@@ -59,6 +59,22 @@ describe('Vehicle CRUD', () => {
 
       expect(getVehicle).to.have.property('id').that.is.a('number');
     })
+    
+    it('Should not get the vehicle', async () => {
+
+      const vehicle = {
+        placa: 'ABC-1234',
+        chassi: '112233445566778899',
+        renavam: '998877665544332211',
+        modelo: 'Carro',
+        marca: '4 rodas',
+        ano: '2030' 
+      } as Vehicle;
+
+      const getVehicle = await vehicleModel.getVehicle(vehicle.id);
+
+      expect(getVehicle).to.be.undefined;
+    })
   })
   
   describe('Update Vehicle', () => {
@@ -77,7 +93,19 @@ describe('Vehicle CRUD', () => {
       const getVehicle = await vehicleModel.updateVehicle(vehicle);
 
       expect(getVehicle).to.have.property('id').that.is.a('number');
-    })
+    });
+
+    it('Should not update the vehicle', async () => {
+      const vehicle = {
+        placa: 'DEF-5678',
+        renavam: '998877665544332211',
+        modelo: 'KA',
+        marca: 'FORD',
+        ano: '2020' 
+      } as Vehicle;
+  
+      vehicleModel.updateVehicle(vehicle).catch(err => assert.instanceOf(err, AppError));
+    });
   })
   
   describe('Delete Vehicle', () => {
@@ -88,7 +116,6 @@ describe('Vehicle CRUD', () => {
       } as Vehicle;
 
       const excludedVehicle = await vehicleModel.deleteVehicle(vehicle.id);
-      console.log(excludedVehicle)
 
       expect(excludedVehicle).to.be.undefined;
     })
